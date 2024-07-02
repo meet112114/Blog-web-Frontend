@@ -10,7 +10,7 @@ const BlogPosts = ({ data }) => {
                     <button className="blogs">
                         <div className='image-sec'>
                             <img
-                                className="blogImg"
+                                className="blogImage"
                                 src={blog.image}
                                 alt=""
                             />

@@ -6,10 +6,18 @@ import logo from '../../assets/images/Linkedin.png'
 import BGIMAGE from "../../assets/images/bg1.jpg"
 import facebookIcon from '../../assets/images/facebook.png';
 import twitterIcon from '../../assets/images/twitter1.png';
-import instagramIcon from '../../assets/images/instagram.png';
+import emailIcon from "../../assets/images/email1.png"
+// import { Helmet } from 'react-helmet';
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  EmailShareButton,
+} from "react-share";
+
+
 
 const BlogPage = () => {
-
+  const isProduction = process.env.NODE_ENV === 'production';
   const [blog, setBlog] = useState({});
   let { id } = useParams();
   console.log(id)
@@ -44,19 +52,8 @@ const BlogPage = () => {
     
   }, [])
 
-
-  const shareOnFacebook = () => {
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
-  }
-
-  const shareOnTwitter = () => {
-    window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(blog.title)}`, '_blank');
-  }
-
-  const shareOnInstagram = () => {
-    const caption = encodeURIComponent(`Check out this blog: ${blog.title} ${window.location.href}`);
-    window.open(`https://www.instagram.com/?url=${caption}`, '_blank');
-  }
+  const URL = `http://localhost:3000/blogInfo/${id}`
+  console.log(URL)
 
   return (
   
@@ -64,6 +61,14 @@ const BlogPage = () => {
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     minHeight: '100vh', }}>
+      {/* <Helmet>
+        <title>{blog.title}</title>
+        <meta property="og:title" content={blog.title} />
+        <meta property="og:description" content={blog.content} />
+        <meta property="og:image" content={blog.image} />
+        <meta property="og:url" content={URL} />
+        <meta property="og:type" content="article" />
+      </Helmet> */}
     <div className='main-container'>
     <div className='title' >{blog.title}</div>
     <div className='image'>
@@ -95,16 +100,40 @@ const BlogPage = () => {
     </div>
    
     <div className='social-share'>
-          <button className='social-button' onClick={shareOnFacebook}>
-            <img src={facebookIcon} alt="Facebook" />
+
+    <FacebookShareButton
+            url={isProduction ? "https://your-production-url.com" : "https://www.example.com"}
+            quote={`${blog.title}\n\n${blog.content}`}
+            hashtag="#techBlogs"
+          >
+            <button className='social-button'>
+              <img src={facebookIcon} alt="Facebook" />
+            </button>
+          </FacebookShareButton>   
+
+
+        <EmailShareButton
+          url={URL}
+          subject={blog.title}
+          body={blog.content}
+        >
+          <button className='social-button' >
+            <img src={emailIcon} alt="Facebook" />
           </button>
-          <button className='social-button' onClick={shareOnInstagram}>
-            <img src={instagramIcon} alt="Instagram" />
-          </button>
-          <button className='social-button' onClick={shareOnTwitter}>
+        </EmailShareButton>    
+          
+
+
+          <TwitterShareButton
+          url={URL}
+          title={blog.title}
+        >
+          <button className='social-button'>
             <img src={twitterIcon} alt="Twitter" />
           </button>
-    </div>
+          </TwitterShareButton>
+    </div>      
+  
   </div>
   </div>
   )
